@@ -1,0 +1,85 @@
+﻿USE [CRYPTOANLZ]
+GO
+
+/****** Object:  StoredProcedure [dbo].[points_analysis]    Script Date: 3/10/2018 10:20:20 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+ALTER PROCEDURE [dbo].[points_analysis]
+AS
+    declare @dtNow date, @dtMonth2 date, @dtMonth4 date, @dtMonth5 date
+    declare @CmNow int, @CmMonth2 int, @CmMonth4 int, @CmMonth5 int
+
+select @CmNow = max(committime) from ContribInfo
+select @dtNow = convert(date, convert(varchar, @CmNow))
+select @dtMonth2 = dateadd(month, -2, @dtNow)
+select @dtMonth4 = dateadd(month, -4, @dtNow)
+select @dtMonth5 = dateadd(month, -5, @dtNow)
+
+select @CmMonth2 = convert(int, (convert(char(8), @dtMonth2, 112)))
+select @CmMonth4 = convert(int, (convert(char(8), @dtMonth4, 112)))
+select @CmMonth5 = convert(int, (convert(char(8), @dtMonth5, 112)))
+--select @CmNow, @CmMonth2, @CmMonth4, @CmMonth5
+    
+	select coinid, symbol, priceweight, initweight, commits34, commits23, commits12, avgcommits,
+	                       active34,  active23, active12, allactive, mcapweight,
+						   priceweight+initweight+commits34+commits23+commits12+avgcommits+
+	                       active34+active23+active12+allactive+mcapweight estimate from
+	(select coinid, symbol 
+	       , case when price1 = 0 then 0
+		          --when price1 <= 0.00001 then 10 
+				  when price1 <= 0.0001 then 10 
+		          when price1 <= 0.001 then 9 
+				  when price1 <= 0.01 then 8 
+				  when price1 <= 0.1 then 7 
+				  when price1 <= 1 then 6 
+				  when price1 <= 10 then 5 
+				  when price1 <= 100 then 4 
+				  when price1 <= 100 then 3 
+				  when price1 <= 1000 then 1 
+				  else 1 end priceweight
+			, case when CoinStart >= @CmMonth2 then 10
+			       when CoinStart >= @CmMonth4 then 8
+				   when CoinStart >= @CmMonth5 then 6
+				   else 2 end initweight
+			, case when commit3 > commit4 then 1 else 0 end commits34
+			, case when commit2 > commit3 then 2 else 0 end commits23
+			, case when commit1 > commit2 then 3 else 0 end commits12
+			, case when (commit1+commit2+commit3+commit3) / 4 >= 300 then 5
+			       when (commit1+commit2+commit3+commit3) / 4 >= 200 then 4
+				   when (commit1+commit2+commit3+commit3) / 4 >= 100 then 3
+				   when (commit1+commit2+commit3+commit3) / 4 >= 50 then 2
+				   else 0 end avgcommits
+			, case when activ3 > activ4 then 1 else 0 end active34
+			, case when activ2 > activ3 then 2 else 0 end active23
+			, case when activ1 > activ2 then 3 else 0 end active12
+			, case when (activ1+activ2+activ3+activ4) / 4 >= 100 then 6
+			       when (activ1+activ2+activ3+activ4) / 4 >= 50 then 5
+				   when (activ1+activ2+activ3+activ4) / 4 >= 25 then 4
+				   when (activ1+activ2+activ3+activ4) / 4 >= 12 then 3
+				   when (activ1+activ2+activ3+activ4) / 4 >= 8 then 2
+				   else 0 end allactive
+			, case when (mcap1+mcap2+mcap3+mcap4) / 4 <= 6000000 then 20
+			       when (mcap1+mcap2+mcap3+mcap4) / 4 <= 13500000 then 18
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 40500000 then 16
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 121500000 then 14
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 464500000 then 12
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 700500000 then 10
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 1093500000 then 8
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 3280500000 then 6
+				   when (mcap1+mcap2+mcap3+mcap4) / 4 <= 2952450000 then 4
+				   else 0 end mcapweight
+	from mainanalz) tbl
+	order by estimate desc
+
+-- exec points_analysis
+
+
+GO
+
+

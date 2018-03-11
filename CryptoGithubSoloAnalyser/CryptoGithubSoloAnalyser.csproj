@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CodeChanks.txt" />
+    <Content Include="SqlUpdates.txt" />
     <Content Include="TechSource.txt" />
   </ItemGroup>
   <ItemGroup>
