@@ -82,4 +82,83 @@ select @CmMonth5 = convert(int, (convert(char(8), @dtMonth5, 112)))
 
 GO
 
+--********************************************************************
+USE [CRYPTOANLZ]
+GO
+
+/****** Object:  Table [dbo].[mainanalz]    Script Date: 3/10/2018 10:22:57 PM ******/
+DROP TABLE [dbo].[mainanalz]
+GO
+
+/****** Object:  Table [dbo].[mainanalz]    Script Date: 3/10/2018 10:22:57 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[mainanalz](
+	[coinid] [varchar](60) NULL,
+	[symbol] [varchar](40) NULL,
+	[addit1] [int] NULL,
+	[delet1] [int] NULL,
+	[commit1] [int] NULL,
+	[devall1] [int] NULL,
+	[devact1] [int] NULL,
+	[activ1] [int] NULL,
+	[caprerdev1] [bigint] NULL,
+	[cappercom1] [bigint] NULL,
+	[mcap1] [bigint] NULL,
+	[price1] [decimal](12, 2) NULL,
+	[coinstart] [int] NULL,
+	[projnum1] [int] NULL,
+	[p1] [int] NULL,
+	[addit2] [int] NULL,
+	[delet2] [int] NULL,
+	[commit2] [int] NULL,
+	[devall2] [int] NULL,
+	[devact2] [int] NULL,
+	[activ2] [int] NULL,
+	[caprerdev2] [bigint] NULL,
+	[cappercom2] [bigint] NULL,
+	[mcap2] [bigint] NULL,
+	[price2] [decimal](12, 2) NULL,
+	[projnum2] [int] NULL,
+	[p2] [int] NULL,
+	[addit3] [int] NULL,
+	[delet3] [int] NULL,
+	[commit3] [int] NULL,
+	[devall3] [int] NULL,
+	[devact3] [int] NULL,
+	[activ3] [int] NULL,
+	[caprerdev3] [bigint] NULL,
+	[cappercom3] [bigint] NULL,
+	[mcap3] [bigint] NULL,
+	[price3] [decimal](12, 2) NULL,
+	[projnum3] [int] NULL,
+	[p3] [int] NULL,
+	[addit4] [int] NULL,
+	[delet4] [int] NULL,
+	[commit4] [int] NULL,
+	[devall4] [int] NULL,
+	[devact4] [int] NULL,
+	[activ4] [int] NULL,
+	[caprerdev4] [bigint] NULL,
+	[cappercom4] [bigint] NULL,
+	[mcap4] [bigint] NULL,
+	[price4] [decimal](12, 2) NULL,
+	[projnum4] [int] NULL,
+	[p4] [int] NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
 
